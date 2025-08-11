@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Clicker Idle Game — Electron desktop build",
   "main": "electron/main.js",
+  "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build:renderer": "vite build",
     "build:app": "electron-builder --win nsis --publish never",
-    "build": "vite build && electron-builder",
     "start": "electron ."
   },
   "dependencies": {
@@ -44,6 +44,6 @@
     "win": {
       "target": "nsis",
       "signAndEditExecutable": false
-    },
+    }
   }
 }
