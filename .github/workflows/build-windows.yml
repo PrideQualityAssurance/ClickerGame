@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
   push:
 
-# If your project is in a subfolder, set it here, e.g. ClickerGame
 env:
-  WORKDIR: .
+  WORKDIR: .                            # change if your project is in a subfolder
+  CSC_IDENTITY_AUTO_DISCOVERY: "false"  # <— prevents signing attempts
 
 jobs:
   build-win:
@@ -21,8 +21,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          # ⛔ remove cache to avoid the lockfile error
-          # cache: 'npm'
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
@@ -30,16 +28,12 @@ jobs:
       - name: Build renderer
         run: npm run build:renderer
 
-      - name: Build Windows app
+      - name: Build Windows app (no signing)
         run: npm run build:app
 
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
           name: IdleClicker-Windows
-          path: |
-            dist/*.exe
-            dist/*.msi
-            dist/*.zip
-            dist/*.7z
-          if-no-files-found: warn
+          path: dist/*.exe
+          if-no-files-found: error
