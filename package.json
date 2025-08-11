@@ -4,11 +4,8 @@
   "description": "Clicker Idle Game \u2014 Electron desktop build",
   "main": "electron/main.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build:renderer": "vite build",
-    "build:app": "electron-builder",
-    "build": "vite build && electron-builder",
-    "start": "electron ."
+    "build:app": "electron-builder --win nsis --publish never"   // <—
   },
   "dependencies": {
     "framer-motion": "^11.0.0",
@@ -33,14 +30,13 @@
   },
   "build": {
     "appId": "com.example.idleclicker",
-    "files": [
-      "dist/**",
-      "electron/**",
-      "package.json"
-    ],
-    "directories": {
-      "buildResources": "build"
-    },
+    "files": ["dist/**", "electron/**", "package.json"],
+    "directories": { "buildResources": "build" },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false                           // <— disable signing edit
+    }
     "win": {
       "target": "nsis",
       "icon": "build/icon.ico"
