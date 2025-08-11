@@ -1,11 +1,14 @@
 {
   "name": "idle-clicker-electron",
   "version": "1.0.0",
-  "description": "Clicker Idle Game \u2014 Electron desktop build",
+  "description": "Clicker Idle Game — Electron desktop build",
   "main": "electron/main.js",
   "scripts": {
+    "dev": "cross-env NODE_ENV=development concurrently -k \"vite\" \"wait-on http://localhost:5173 && electron .\"",
     "build:renderer": "vite build",
-    "build:app": "electron-builder --win nsis --publish never"   // <—
+    "build:app": "electron-builder --win nsis --publish never",
+    "build": "vite build && electron-builder",
+    "start": "electron ."
   },
   "dependencies": {
     "framer-motion": "^11.0.0",
@@ -30,24 +33,20 @@
   },
   "build": {
     "appId": "com.example.idleclicker",
-    "files": ["dist/**", "electron/**", "package.json"],
-    "directories": { "buildResources": "build" },
+    "files": [
+      "dist/**",
+      "electron/**",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
     "win": {
       "target": "nsis",
       "icon": "build/icon.ico",
-      "signAndEditExecutable": false                           // <— disable signing edit
-    }
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.ico"
+      "signAndEditExecutable": false
     },
-    "mac": {
-      "target": "dmg",
-      "icon": "build/icon.icns"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "build"
-    }
+    "mac": { "target": "dmg", "icon": "build/icon.icns" },
+    "linux": { "target": "AppImage", "icon": "build" }
   }
 }
