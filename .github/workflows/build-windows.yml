@@ -1,25 +1,30 @@
 name: Build Windows EXE
 
 on:
-  workflow_dispatch:    # lets you click “Run workflow”
-  push:                 # runs on any push to any branch
+  workflow_dispatch:
+  push:
 
 jobs:
   build-win:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - name: Install
-        run: npm ci
+          cache: 'npm'        # cache will simply skip without a lockfile
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
       - name: Build renderer
         run: npm run build:renderer
+
       - name: Build Windows app
         run: npm run build:app
-      - name: Upload installer
+
+      - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
           name: IdleClicker-Windows
